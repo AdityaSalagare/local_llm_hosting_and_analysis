@@ -216,28 +216,6 @@ API documentation is available via Swagger UI at:
 
 - `ws://localhost:8000/ws/chat/{conversation_id}/` - Real-time chat streaming
 
-## Architecture Diagram
-
-```text
-┌─────────────┐
-│   React     │
-│  Frontend   │
-└──────┬──────┘
-       │ HTTP/WebSocket
-       │
-┌──────▼──────────────────┐
-│   Django REST API       │
-│   + Django Channels     │
-└──────┬──────────────────┘
-       │
-       ├──────────┬────────────┐
-       │          │            │
-┌──────▼───┐  ┌───▼──────┐  ┌──▼──────┐
-│PostgreSQL│  │  Redis   │  │  LLM    │
-│Database  │  │(Channels)│  │ Service │
-└──────────┘  └──────────┘  └─────────┘
-```
-
 ### Data Flow
 
 1. **Chat Flow**:
@@ -256,7 +234,26 @@ API documentation is available via Swagger UI at:
 
 ## Sample Conversation Data
 
-The system includes sample conversation data for testing. You can create conversations through:
+The system includes a management command to create sample conversation data with AI-generated insights for testing. This is recommended for new users to quickly test all features.
+
+### Quick Setup
+
+```bash
+cd backend
+python manage.py create_sample_data --count 10
+```
+
+This creates 10 sample conversations with:
+
+- Realistic conversation messages
+- AI-generated summaries, topics, sentiment analysis, and key points
+- Conversations spread across the last 30 days
+
+**For detailed instructions, see [SAMPLE_DATA_GUIDE.md](SAMPLE_DATA_GUIDE.md)**
+
+### Alternative Methods
+
+You can also create conversations through:
 
 - The web interface at `/chat`
 - The REST API at `/api/conversations/`

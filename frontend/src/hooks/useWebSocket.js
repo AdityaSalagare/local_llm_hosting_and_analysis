@@ -30,6 +30,7 @@ export function useWebSocket(conversationId, onMessage) {
         setStreamingTokens(prev => prev + data.token)
       } else if (data.type === 'ai_thinking') {
         // Add thinking to current message
+        console.log('Received thinking:', data.thinking)
         setCurrentThinking(prev => {
           const newThinking = [...prev, data.thinking]
           setCurrentMessage(prevMsg => prevMsg ? { ...prevMsg, thinking: newThinking } : null)

@@ -230,12 +230,12 @@ API documentation is available via Swagger UI at:
 │   + Django Channels     │
 └──────┬──────────────────┘
        │
-       ├──────────┬──────────┐
-       │          │          │
-┌──────▼──┐  ┌───▼────┐  ┌──▼──────┐
-│PostgreSQL│  │  Redis │  │  LLM    │
-│Database  │  │(Channels)│ │ Service │
-└──────────┘  └─────────┘  └─────────┘
+       ├──────────┬────────────┐
+       │          │            │
+┌──────▼───┐  ┌───▼──────┐  ┌──▼──────┐
+│PostgreSQL│  │  Redis   │  │  LLM    │
+│Database  │  │(Channels)│  │ Service │
+└──────────┘  └──────────┘  └─────────┘
 ```
 
 ### Data Flow
@@ -334,8 +334,38 @@ npm test
 
 ## License
 
-This project is created for assignment purposes by Aditya Salagare for a certain company interview.
+This project is created for assignment purposes by Aditya Salagare for a certain company assessment.
 
-## Contact
+## Screenshots
 
-For questions or issues, please refer to the assignment contact email.
+1.**Main Ui**:
+
+  ![Main UI](image/main_ui.png)
+
+2.**Dashboard**:
+
+  ![Dashboard](image/dashboard.png)
+
+3.**Download Feature**:
+
+  ![Download Feature](image/download.png)
+
+4.**Share Feature**
+
+  ![Share Feature](image/share_feature.png)
+
+5.**Intelligent Analysis**
+
+  ![Intelligence Analysis](image/intelligence_analysis.png)
+
+6.**Swagger Api**:
+
+  ![Swagger UI](image/swagger_ui.png)
+
+7.**Admin Panel**:
+
+  ![Admin Panel](image/admin_panel.png)
+
+8.**Admin Panel Message**:
+
+  ![Admin Panel Message](image/admin_panel_message.png)

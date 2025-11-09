@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Send, Menu, X, MoreVertical, Download, Share2, Moon, Sun } from 'lucide-react'
+import { Send, Menu, X, MoreVertical, Download, Share2, Moon, Sun, Edit2, Check } from 'lucide-react'
 import { conversationService } from '../services/apiService'
 import { useWebSocket } from '../hooks/useWebSocket'
 import { useDarkMode } from '../hooks/useDarkMode'
@@ -25,9 +25,12 @@ export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [sidebarRefresh, setSidebarRefresh] = useState(0)
+  const [isEditingTitle, setIsEditingTitle] = useState(false)
+  const [editedTitle, setEditedTitle] = useState('')
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
   const menuRef = useRef(null)
+  const titleInputRef = useRef(null)
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -111,9 +114,44 @@ export default function Chat() {
       const response = await conversationService.getById(conversationId)
       setConversation(response.data)
       setMessages(response.data.messages || [])
+      setEditedTitle(response.data.title || '')
     } catch (error) {
       console.error('Error loading conversation:', error)
     }
+  }
+
+  const handleRenameConversation = async () => {
+    if (!conversationId || !editedTitle.trim()) {
+      setIsEditingTitle(false)
+      setEditedTitle(conversation?.title || '')
+      return
+    }
+
+    try {
+      const response = await conversationService.update(conversationId, { title: editedTitle.trim() })
+      setConversation(response.data)
+      setIsEditingTitle(false)
+      setSidebarRefresh(prev => prev + 1) // Refresh sidebar to show new title
+    } catch (error) {
+      console.error('Error renaming conversation:', error)
+      setEditedTitle(conversation?.title || '')
+      setIsEditingTitle(false)
+    }
+  }
+
+  const handleCancelRename = () => {
+    setEditedTitle(conversation?.title || '')
+    setIsEditingTitle(false)
+  }
+
+  const handleStartRename = () => {
+    setEditedTitle(conversation?.title || '')
+    setIsEditingTitle(true)
+    // Focus input after state update
+    setTimeout(() => {
+      titleInputRef.current?.focus()
+      titleInputRef.current?.select()
+    }, 0)
   }
 
   const createNewConversation = async () => {
@@ -209,16 +247,62 @@ export default function Chat() {
       <div className="flex-1 flex flex-col">
         {/* Top Bar */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg md:hidden"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg md:hidden flex-shrink-0"
             >
               <Menu className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             </button>
-            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-              {conversation?.title || 'New Conversation'}
-            </h1>
+            {isEditingTitle ? (
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <input
+                  ref={titleInputRef}
+                  type="text"
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleRenameConversation()
+                    } else if (e.key === 'Escape') {
+                      handleCancelRename()
+                    }
+                  }}
+                  className="flex-1 px-2 py-1 text-lg font-semibold bg-white dark:bg-gray-800 border border-blue-500 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white min-w-0"
+                  placeholder="Conversation title"
+                  maxLength={255}
+                />
+                <button
+                  onClick={handleRenameConversation}
+                  className="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded transition-colors"
+                  title="Save"
+                >
+                  <Check className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={handleCancelRename}
+                  className="p-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+                  title="Cancel"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <h1 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
+                  {conversation?.title || 'New Conversation'}
+                </h1>
+                {conversation && (
+                  <button
+                    onClick={handleStartRename}
+                    className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors flex-shrink-0"
+                    title="Rename conversation"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-2">
             {conversation && (

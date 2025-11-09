@@ -19,6 +19,9 @@ export const conversationService = {
   // Create conversation
   create: (data) => api.post('/conversations/', data),
   
+  // Update conversation (e.g., rename)
+  update: (id, data) => api.patch(`/conversations/${id}/`, data),
+  
   // End conversation
   end: (id) => api.post(`/conversations/${id}/end/`),
   

@@ -2,7 +2,7 @@
 
 ## Prerequisites Checklist
 
-- [ ] Python 3.8+ installed
+- [ ] Python 3.9+ installed
 - [ ] Node.js 16+ installed
 - [ ] PostgreSQL installed (or use SQLite)
 - [ ] Redis installed (optional, can use in-memory)
@@ -11,10 +11,6 @@
 ## Step-by-Step Setup
 
 ### 1. Clone/Download the Repository
-
-```bash
-cd ero_assignment
-```
 
 ### 2. Backend Setup
 
@@ -66,6 +62,7 @@ npm install
 ### 6. Start Services
 
 #### Terminal 1 - Backend
+
 ```bash
 cd backend
 source venv/bin/activate  # or venv\Scripts\activate on Windows
@@ -73,6 +70,7 @@ python manage.py runserver
 ```
 
 #### Terminal 2 - Frontend
+
 ```bash
 cd frontend
 npm run dev
@@ -90,6 +88,7 @@ npm run dev
 ### Using SQLite (Easier for Development)
 
 In `.env`:
+
 ```
 USE_SQLITE=true
 ```
@@ -97,6 +96,7 @@ USE_SQLITE=true
 ### Using PostgreSQL
 
 In `.env`:
+
 ```
 USE_SQLITE=false
 DB_NAME=chat_portal
@@ -112,6 +112,7 @@ DB_PORT=5432
 2. Load your model in LM Studio
 3. Start local server in LM Studio
 4. In `.env`:
+
 ```
 USE_LM_STUDIO=true
 LM_STUDIO_URL=http://localhost:1234
@@ -121,6 +122,7 @@ LM_STUDIO_URL=http://localhost:1234
 
 1. Place your `.gguf` file in the backend directory
 2. In `.env`:
+
 ```
 USE_LM_STUDIO=false
 MODEL_PATH=model.gguf
@@ -129,6 +131,7 @@ MODEL_PATH=model.gguf
 ### WebSocket Configuration
 
 If Redis is not available, use in-memory channels:
+
 ```
 USE_INMEMORY_CHANNELS=true
 ```
@@ -136,19 +139,23 @@ USE_INMEMORY_CHANNELS=true
 ## Troubleshooting
 
 ### Import Errors
+
 - Ensure virtual environment is activated
 - Reinstall dependencies: `pip install -r requirements.txt`
 
 ### Database Errors
+
 - Check database credentials in `.env`
 - Try using SQLite: `USE_SQLITE=true`
 - Run migrations: `python manage.py migrate`
 
 ### WebSocket Issues
+
 - Check Redis is running (or set `USE_INMEMORY_CHANNELS=true`)
 - Verify CORS settings in `settings.py`
 
 ### LLM Not Working
+
 - Check model path in `.env`
 - Verify LM Studio is running (if using)
 - Check console for error messages
@@ -165,4 +172,3 @@ USE_INMEMORY_CHANNELS=true
 - Check the main README.md for detailed documentation
 - Review ARCHITECTURE.md for system design
 - Check API documentation at `/swagger/`
-
